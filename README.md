@@ -1,2 +1,0 @@
-# Study
-just study test
