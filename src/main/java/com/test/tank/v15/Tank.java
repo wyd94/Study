@@ -1,4 +1,4 @@
-package com.test.tank.v11;
+package com.test.tank.v15;
 import java.awt.event.*;
 
 import org.omg.CORBA.INTERNAL;
@@ -13,27 +13,44 @@ public class Tank {
 	
 	public static final int WIDTH =30;
 	public static final int HEIGHT=30;
+	//设置坦克生死的量
+	private boolean live=true;
 	
+	public boolean isLive() {
+		return live;
+	}
+	public void setLive(boolean live) {
+		this.live = live;
+	}
 	TankClient tc;
+	//设置坦克阵营
+	private boolean good;
 	private int x;
 	private int y;
+	
 	private boolean bL=false, bU=false, bR=false, bD=false;
 	//枚举类型
 	enum Direction{L, LU, U, RU, R, RD, D, LD, STOP};
 	private Direction dir = Direction.STOP;
 	private Direction ptDir =Direction.D;//炮筒方向
-	public Tank(int x, int y) {
+	
+	
+	public Tank(int x, int y,boolean good) {
 		this.x = x;
 		this.y = y;
+		this.good =good;
 	}
-	public Tank(int x, int y, TankClient tc){
-		this(x, y);//初始化x，y
+	public Tank(int x, int y, boolean good, TankClient tc){
+		this(x, y,good);//初始化x，y
 		this.tc =tc;//初始化
 	}
 
 	public void draw(Graphics g) {
+		if(!live) return;//如果死了，不绘画坦克
 		Color color =g.getColor();
-		g.setColor(Color.RED);
+		if(good) g.setColor(Color.RED);
+		else g.setColor(Color.BLUE);
+		
 		g.fillOval(x, y, 30, 30);//绘画同心圆
 		g.setColor(color);
 		//炮筒方向
@@ -112,6 +129,13 @@ public class Tank {
   	   if (this.dir != Direction.STOP) {
 		this.ptDir =this.dir;
 	}
+  	   //控制坦克出界的问题
+  	   if (x < 0) x = 0;
+  	   if (y < 25) y =25;
+  	   if(x + Tank.WIDTH > TankClient.GAME_WIDTH) x =TankClient.GAME_WIDTH -Tank.WIDTH;
+  	   if(y + Tank.HEIGHT > TankClient.GAME_HEIGH) y = TankClient.GAME_HEIGH - Tank.HEIGHT;
+		
+	
   	}
   
 
@@ -178,9 +202,12 @@ public class Tank {
 	public Missile fire(){
 		int x =this.x + Tank.WIDTH/2 - Missile.WIDTH/2;
 		int y =this.y + Tank.HEIGHT/2 - Missile.HEIGHT/2;
-		Missile m =new Missile(x, y, ptDir);//根据坦克现在的位置传递给子弹
+		Missile m =new Missile(x, y, ptDir,this.tc);//根据坦克现在的位置传递给子弹
 		tc.missiles.add(m);
 		return m;
 		
+	}
+	public Rectangle getRect(){
+		return new Rectangle(x, y, WIDTH, HEIGHT);
 	}
 }

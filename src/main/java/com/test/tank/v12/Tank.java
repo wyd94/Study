@@ -1,4 +1,4 @@
-package com.test.tank.v11;
+package com.test.tank.v12;
 import java.awt.event.*;
 
 import org.omg.CORBA.INTERNAL;
@@ -178,7 +178,7 @@ public class Tank {
 	public Missile fire(){
 		int x =this.x + Tank.WIDTH/2 - Missile.WIDTH/2;
 		int y =this.y + Tank.HEIGHT/2 - Missile.HEIGHT/2;
-		Missile m =new Missile(x, y, ptDir);//根据坦克现在的位置传递给子弹
+		Missile m =new Missile(x, y, ptDir,this.tc);//根据坦克现在的位置传递给子弹
 		tc.missiles.add(m);
 		return m;
 		

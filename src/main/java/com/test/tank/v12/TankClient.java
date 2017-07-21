@@ -1,4 +1,4 @@
-package com.test.tank.v11;
+package com.test.tank.v12;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -21,6 +21,8 @@ public class TankClient extends Frame{
 	//使用容器List<>
     List<Missile> missiles =new ArrayList<Missile>();
 	Image OffScreenImage = null;
+	
+	
 		//重写paint
 	public void paint(Graphics g) {
 		//绘画炮弹数量
@@ -28,6 +30,11 @@ public class TankClient extends Frame{
 	 //遍历子弹
 		for(int i =0; i<missiles.size(); i++){
 			Missile m =missiles.get(i);
+		/*	
+		 * 方法一：
+		 * if(!m.isLive()) missiles.remove(m);
+			else m.draw(g);
+		*/
 			m.draw(g);
 		}
 		tank.draw(g);
@@ -41,7 +48,7 @@ public class TankClient extends Frame{
 	  }	
 	   Graphics gOffScreen= OffScreenImage.getGraphics();
 	   Color color=gOffScreen.getColor();
-	   gOffScreen.setColor(Color.GREEN);
+	   gOffScreen.setColor(Color.CYAN);
 	   gOffScreen.fillRect(0, 0, GAME_WIDTH,GAME_HEIGH);
 	   gOffScreen.setColor(color);
 	   paint(gOffScreen);

@@ -1,4 +1,4 @@
-package com.test.tank.v11;
+package com.test.tank.v16;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -17,20 +17,43 @@ public class TankClient extends Frame{
 	public static final int GAME_HEIGH = 600;
 	
 	
-    Tank tank =new Tank(50, 50,this);
+    Tank tank =new Tank(50, 50, true, this);//好
+    Tank enetank = new Tank(100, 100, false,this);//坏
+    
+    
 	//使用容器List<>
-    List<Missile> missiles =new ArrayList<Missile>();
+    
+    List<Missile> missiles =new ArrayList<Missile>();//子弹
+    List<Explode> explodes =new ArrayList<Explode>();
 	Image OffScreenImage = null;
+	
+	
 		//重写paint
 	public void paint(Graphics g) {
 		//绘画炮弹数量
-		g.drawString("missiles count:" + missiles.size(), 10, 40);
+		
+	   g.drawString("missiles count:" + missiles.size(), 10, 40);
+	   g.drawString("explodes count:" + explodes.size(), 10,60);
 	 //遍历子弹
 		for(int i =0; i<missiles.size(); i++){
 			Missile m =missiles.get(i);
+			m.hitTank(enetank);
 			m.draw(g);
+		/*	
+		 * 方法一：
+		 * if(!m.isLive()) missiles.remove(m);
+			else m.draw(g);
+		*/
 		}
+		//绘制炸弹
+		for (int i = 0; i < explodes.size(); i++) {
+			Explode e =explodes.get(i);
+			e.draw(g);
+		}
+		
+		
 		tank.draw(g);
+		enetank.draw(g);
 		
 	
 				
@@ -41,7 +64,7 @@ public class TankClient extends Frame{
 	  }	
 	   Graphics gOffScreen= OffScreenImage.getGraphics();
 	   Color color=gOffScreen.getColor();
-	   gOffScreen.setColor(Color.GREEN);
+	   gOffScreen.setColor(Color.CYAN);
 	   gOffScreen.fillRect(0, 0, GAME_WIDTH,GAME_HEIGH);
 	   gOffScreen.setColor(color);
 	   paint(gOffScreen);
@@ -81,7 +104,7 @@ public class TankClient extends Frame{
 			while(true){
 				repaint();//调用外部包装类的repaint方法，重画paint
 			  try {
-				Thread.sleep(50);//每睡眠100毫秒重画一次
+				Thread.sleep(100);//每睡眠100毫秒重画一次
 			} catch (InterruptedException e) {
 			     e.printStackTrace();
 			}

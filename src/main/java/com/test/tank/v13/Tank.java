@@ -1,4 +1,4 @@
-package com.test.tank.v11;
+package com.test.tank.v13;
 import java.awt.event.*;
 
 import org.omg.CORBA.INTERNAL;
@@ -112,6 +112,13 @@ public class Tank {
   	   if (this.dir != Direction.STOP) {
 		this.ptDir =this.dir;
 	}
+  	   //控制坦克出界的问题
+  	   if (x < 0) x = 0;
+  	   if (y < 25) y =25;
+  	   if(x + Tank.WIDTH > TankClient.GAME_WIDTH) x =TankClient.GAME_WIDTH -Tank.WIDTH;
+  	   if(y + Tank.HEIGHT > TankClient.GAME_HEIGH) y = TankClient.GAME_HEIGH - Tank.HEIGHT;
+		
+	
   	}
   
 
@@ -178,7 +185,7 @@ public class Tank {
 	public Missile fire(){
 		int x =this.x + Tank.WIDTH/2 - Missile.WIDTH/2;
 		int y =this.y + Tank.HEIGHT/2 - Missile.HEIGHT/2;
-		Missile m =new Missile(x, y, ptDir);//根据坦克现在的位置传递给子弹
+		Missile m =new Missile(x, y, ptDir,this.tc);//根据坦克现在的位置传递给子弹
 		tc.missiles.add(m);
 		return m;
 		
